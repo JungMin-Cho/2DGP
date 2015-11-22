@@ -236,7 +236,6 @@ def draw():
     global test, num
     clear_canvas()
     grass.draw()
-    boy.draw()
     monster.draw()
     monster.update()
 
