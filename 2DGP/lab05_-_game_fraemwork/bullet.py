@@ -8,6 +8,7 @@ from pico2d import *
 class Bullet:
 
     image = None
+    hit_sound = None
 
     PATTERN_1, PATTERN_2, PATTERN_3, PATTERN_4 = 0, 1, 2, 3
 
@@ -21,13 +22,24 @@ class Bullet:
         self.count = 0
         self.fall_speed = 0.5
         self.state = 0
+        self.hit = 0
+        if Bullet.hit_sound == None:
+            Bullet.hit_sound = load_music('scream.wav')
+            Bullet.hit_sound.set_volume(32)
 
     def draw(self):
-        self.image.clip_draw(415, 410, 30, 30 , self.x , self.y)
-        #self.image.clip_draw(415, 410, 30, 30 ,self.x , self.y)
-        self.draw_bb()
+        if self.hit == 1:
+            pass
+        else:
+            self.image.clip_draw(415, 410, 30, 30 , self.x , self.y)
+            #self.image.clip_draw(415, 410, 30, 30 ,self.x , self.y)
+            self.draw_bb()
+    def hits(self, bullet):
+        self.hit_sound.play()
+        pass
 
     def initbullet(self, angle, state, x, y):
+        self.hit = 0
         if state == Bullet.PATTERN_1:
             self.x = x#random.randint(50,750)
             self.y = y#random.randint(50,550)

@@ -49,6 +49,16 @@ def pause():
 def resume():
     pass
 
+def collide(a, b):
+    # fill here
+    left_a, bottom_a, right_a, top_a =  a.get_bb()
+    left_b, bottom_b, right_b, top_b =  b.get_bb()
+
+    if left_a > right_b : return False
+    if right_a < left_b : return False
+    if top_a < bottom_b : return False
+    if bottom_a > top_b : return False
+    return True
 
 def handle_events(frame_time):
 
@@ -91,6 +101,18 @@ def update(frame_time):
         current_time = 0
 
     monster.update(frame_time)
+
+    for test in monster.gun:
+        if collide(test, character):
+            #monster.count -= 1
+            #monster.gun.remove(test)
+
+            test.hit = 1
+
+    #delay(0.2)
+
+
+
 
 
 

@@ -16,6 +16,6 @@ class Background:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return 0, 0, 800, 50
+        return 800, 600, 0, 0
 
     pass

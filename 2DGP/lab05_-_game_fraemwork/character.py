@@ -17,7 +17,7 @@ class Character:
     FRAMES_PER_ACTION = 8
 
     image = None
-    eat_sound = None
+    hit_sound = None
 
     LEFT_RUN, RIGHT_RUN, LEFT_STAND, RIGHT_STAND = 0, 1, 2, 3
 
@@ -32,21 +32,26 @@ class Character:
         self.state = self.RIGHT_STAND
         if Character.image == None:
             Character.image = load_image('animation_sheet.png')
+        if Character.hit_sound == None:
+            Character.hit_sound = load_music('pickup.wav')
+            Character.hit_sound.set_volume(32)
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_LEFT: self.xdir += -1
             elif event.key == SDLK_RIGHT: self.xdir += 1
-            elif event.key == SDLK_UP: self.ydir += 1
-            elif event.key == SDLK_DOWN: self.ydir -= 1
+            #elif event.key == SDLK_UP: self.ydir += 1
+            #elif event.key == SDLK_DOWN: self.ydir -= 1
 
         if event.type == SDL_KEYUP:
             if event.key == SDLK_LEFT: self.xdir += 1
             elif event.key == SDLK_RIGHT: self.xdir += -1
-            elif event.key == SDLK_UP: self.ydir -= 1
-            elif event.key == SDLK_DOWN: self.ydir += 1
+            #elif event.key == SDLK_UP: self.ydir -= 1
+            #elif event.key == SDLK_DOWN: self.ydir += 1
 
-
+    def hit(self, bullet):
+        self.hit_sound.play()
+        pass
 
     def update(self, frame_time):
         self.life_time += frame_time
@@ -55,13 +60,15 @@ class Character:
         self.frame = int(self.total_frames) % 8
 
         self.x += (self.xdir * distance)
-        self.y += (self.ydir * distance)
+        #self.y += (self.ydir * distance)
 
         if self.xdir == -1: self.state = self.LEFT_RUN
         elif self.xdir == 1: self.state = self.RIGHT_RUN
         elif self.xdir == 0:
             if self.state == self.RIGHT_RUN: self.state = self.RIGHT_STAND
             elif self.state == self.LEFT_RUN: self.state = self.LEFT_STAND
+
+        self.x = clamp(25, self.x, 775)
 
 
     def draw(self):
