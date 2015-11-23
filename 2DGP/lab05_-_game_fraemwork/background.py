@@ -5,6 +5,9 @@ from pico2d import *
 class Background:
     def __init__(self):
         self.image = load_image('grass.png')
+        self.bgm = load_music('back_bgm.wav')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
     def draw(self):
         self.image.draw(400, 30)

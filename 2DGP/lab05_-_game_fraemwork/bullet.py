@@ -39,6 +39,18 @@ class Bullet:
             self.y = y#random.randint(50,550)
             self.r = 1
             self.state = state
+        elif state == Bullet.PATTERN_3:
+            self.x = x
+            self.y = y
+            self.r = 1
+            self.state = state
+            self.angle = angle
+        elif state == Bullet.PATTERN_4:
+            self.x = x
+            self.y = y
+            self.r = 1
+            self.state = state
+            self.angle = angle
             pass
 
 
@@ -56,5 +68,13 @@ class Bullet:
         elif self.state == Bullet.PATTERN_2:
             self.r += frame_time * self.fall_speed
             self.y -= self.r
+        elif self.state == Bullet.PATTERN_3:
+            self.r += frame_time * self.fall_speed
+            self.x += sin(self.angle)*self.r
+            self.y += cos(self.angle)*self.r
+        elif self.state == Bullet.PATTERN_4:
+            self.r += frame_time * self.fall_speed
+            self.x += sin(self.angle)*self.r
+            self.y += cos(self.angle)*self.r
         #print("hihihi")
     pass

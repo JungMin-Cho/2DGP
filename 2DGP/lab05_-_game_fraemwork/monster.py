@@ -38,37 +38,63 @@ class Monster:
         #self.count = 0
 
     def update(self, frame_time):
-        if self.state == Monster.PATTERN_4:
-            for i in range(self.count):
-                self.gun[i].update(frame_time)
-            if 109 < self.count:
-                pass
-            else:
-                self.count += 1
-        elif self.state == Monster.PATTERN_1:
-            if 4.71 < self.angle :
-                    self.increase = -0.1
-            elif self.angle < 1.57:
-                self.increase = 0.1
-            self.angle += self.increase
+        if self.state == Monster.MOVE_RIGHT:
             pass
+        elif self.state == Monster.PATTERN_1:
+            self.current_time += frame_time
+            print("1 frame_time = %f, current_time = %f" % (frame_time,self.current_time))
+            if self.current_time > 0.08:
+                self.gun[self.count].initbullet(self.angle, self.state, self.x, self.y)
+                if 4.71 < self.angle :
+                    self.increase = -0.2
+                elif self.angle < 1.57:
+                    self.increase = 0.2
+                self.angle += self.increase
+                self.current_time = 0
+                if 108 < self.count:
+                    pass
+                else:
+                    self.count += 1
+            pass
+
         elif self.state == Monster.PATTERN_2:
+            #current_time = time.clock()
+            self.current_time += frame_time
+            print("2 frame_time = %f, current_time = %f" % (frame_time,self.current_time))
+            if self.current_time > 0.2:
+                print("time")
+                self.gun[self.count].initbullet(self.angle, self.state, self.x, self.y)
+                self.current_time = 0
+                if 108 < self.count:
+                    pass
+                else:
+                    self.count += 1
             self.x += self.xdir * self.speed
             if self.x - 40 < 0:
                 self.xdir = 1
             elif 800 < self.x + 40:
                 self.xdir = -1
-        #current_time = time.clock()
-        self.current_time += frame_time
-        print("frame_time = %f, current_time = %f" % (frame_time,self.current_time))
-        if self.current_time > 0.5:
-            print("time")
-            self.gun[self.count].initbullet(self.angle, self.state, self.x, self.y)
-            self.current_time = 0
-            if 108 < self.count:
-                pass
-            else:
-                self.count += 1
+
+        elif self.state == Monster.PATTERN_3:
+            self.current_time += frame_time
+            print("3 frame_time = %f, current_time = %f" % (frame_time,self.current_time))
+            if self.current_time > 0.2:
+                self.current_time = 0
+                if 80 < self.count:
+                    pass
+                else:
+                    self.count += 20
+        elif self.state == Monster.PATTERN_4:
+            self.current_time += frame_time
+            print("3 frame_time = %f, current_time = %f" % (frame_time,self.current_time))
+            if self.current_time > 0.2:
+                self.current_time = 0
+                if 100 < self.count:
+                    pass
+                else:
+                    self.count += 10
+            pass
+
         for i in range(self.count):
             self.gun[i].update(frame_time)
 
@@ -77,10 +103,10 @@ class Monster:
 
 
     def draw(self):
+        for i in range(self.count):
+            self.gun[i].draw()
         self.image.clip_draw(300, 330, 80, 80, self.x , self.y)
         self.draw_bb()
-        for bullet in self.gun:
-            bullet.draw()
 
     def initbullet(self):
         self.count = 0
@@ -98,6 +124,17 @@ class Monster:
             elif self.state == Monster.PATTERN_2:
                 for bullet in self.gun:
                     bullet.initbullet(self.angle, self.state, self.x, self.y)
+            elif self.state == Monster.PATTERN_3:
+                for bullet in self.gun:
+                    self.angle += 0.314
+                    bullet.initbullet(self.angle, self.state, self.x, self.y)
+            elif self.state == Monster.PATTERN_4:
+                for bullet in self.gun:
+                    self.angle += 0.314
+                    bullet.initbullet(self.angle, self.state, self.x, self.y)
+
+
+
         print("init")
         #self.count = 0
 

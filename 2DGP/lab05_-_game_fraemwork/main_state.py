@@ -12,30 +12,25 @@ import title_state
 from bullet import Bullet
 from character import Character
 from monster import Monster
+from background import Background
 
 name = "MainState"
 
 character = None
-grass = None
+background = None
 font = None
 
 bullet = None
 monster = None
+current_time = 0
 
-
-class Grass:
-    def __init__(self):
-        self.image = load_image('grass.png')
-
-    def draw(self):
-        self.image.draw(400, 30)
 
 def enter():
     global character, grass, bullet, monster
     monster = Monster()
     bullet = Bullet()
     character = Character()
-    grass = Grass()
+    grass = Background()
 
 
 
@@ -73,13 +68,27 @@ def handle_events(frame_time):
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_j):
                 monster.state = Monster.PATTERN_2
                 monster.initbullet()
-                print("h")
+                print("j")
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_k):
+                monster.state = Monster.PATTERN_3
+                monster.initbullet()
+                print("k")
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_l):
+                monster.state = Monster.PATTERN_4
+                monster.initbullet()
+                print("l")
             else:
                 character.handle_event(event)
 
 
 def update(frame_time):
+    global  current_time
+    current_time += frame_time
+
     character.update(frame_time)
+    if current_time > 0.05:
+        #monster.update(frame_time)
+        current_time = 0
 
     monster.update(frame_time)
 
