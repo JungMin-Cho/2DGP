@@ -24,8 +24,9 @@ class Bullet:
         self.state = 0
         self.hit = 0
         if Bullet.hit_sound == None:
-            Bullet.hit_sound = load_music('scream.wav')
-            Bullet.hit_sound.set_volume(32)
+            pass
+            #Bullet.hit_sound = load_music('scream.wav')
+            #Bullet.hit_sound.set_volume(32)
 
     def draw(self):
         if self.hit == 1:

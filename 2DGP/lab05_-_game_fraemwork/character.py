@@ -1,6 +1,7 @@
 __author__ = 'cho'
 
 import random
+import time
 
 from pico2d import *
 
@@ -14,13 +15,15 @@ class Character:
     print(RUN_SPEED_PPS)
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+
     FRAMES_PER_ACTION = 8
+    IDLE_FRAMES_PER_ACTION = 4
 
     image = None
     hit_sound = None
 
     LEFT_RUN, RIGHT_RUN, LEFT_STAND, RIGHT_STAND = 0, 1, 2, 3
-
+    LEFT_JUMP, RIGHT_JUMP, FALLING = 0, 1, 3
 
     def __init__(self):
         self.x, self.y = random.randint(100, 700), 90
@@ -30,16 +33,33 @@ class Character:
         self.xdir = 0
         self.ydir = 0
         self.state = self.RIGHT_STAND
+        self.jump = 3
+        self.jump_count = 2
+        self.current_time = 0
+
         if Character.image == None:
             Character.image = load_image('animation_sheet.png')
         if Character.hit_sound == None:
-            Character.hit_sound = load_music('pickup.wav')
-            Character.hit_sound.set_volume(32)
+            pass
+            #Character.hit_sound = load_music('pickup.wav')
+            #Character.hit_sound.set_volume(32)
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_LEFT: self.xdir += -1
             elif event.key == SDLK_RIGHT: self.xdir += 1
+            elif event.key == SDLK_x:
+                if 0 < self.jump_count:
+                    self.jump_count -= 1
+                    if self.state == Character.RIGHT_STAND or self.state == Character.RIGHT_RUN:
+                        self.jump = Character.RIGHT_JUMP
+                        self.sate = Character.RIGHT_RUN
+                        #self.current_time = 0
+                    elif self.state == Character.LEFT_STAND or self.state == Character.LEFT_RUN:
+                        self.jump = Character.LEFT_JUMP
+                        self.state = Character.LEFT_RUN
+                        #self.current_time = 0
+
             #elif event.key == SDLK_UP: self.ydir += 1
             #elif event.key == SDLK_DOWN: self.ydir -= 1
 
@@ -60,7 +80,20 @@ class Character:
         self.frame = int(self.total_frames) % 8
 
         self.x += (self.xdir * distance)
-        #self.y += (self.ydir * distance)
+        if self.jump != 3:
+            self.ydir = 1
+            self.current_time += frame_time
+            print("jump frame_time = %f, current_time = %f" % (frame_time,self.current_time))
+            if self.current_time > 0.2:
+                #self.gun[self.count].initbullet(self.angle, self.state, self.x, self.y)
+                self.jump = Character.FALLING
+                self.current_time = 0
+        else:
+            self.ydir = -1
+        if self.y <= 75:
+            self.y = 75
+            self.jump_count = 2
+        self.y += (self.ydir * distance)
 
         if self.xdir == -1: self.state = self.LEFT_RUN
         elif self.xdir == 1: self.state = self.RIGHT_RUN
@@ -69,6 +102,7 @@ class Character:
             elif self.state == self.LEFT_RUN: self.state = self.LEFT_STAND
 
         self.x = clamp(25, self.x, 775)
+        self.y = clamp(75, self.y, 775)
 
 
     def draw(self):
