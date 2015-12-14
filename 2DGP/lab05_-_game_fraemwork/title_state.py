@@ -31,7 +31,8 @@ def handle_events(frame_time):
 
 def draw(frame_time):
     clear_canvas()
-    image.draw(400, 300)
+    image.clip_draw(0,0,800,600,400,300)
+    #image.draw(400, 300)
     update_canvas()
 
 

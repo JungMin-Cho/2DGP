@@ -22,6 +22,7 @@ class Bullet:
         self.count = 0
         self.fall_speed = 0.5
         self.state = 0
+        self.ex = 1
         self.hit = 0
         if Bullet.hit_sound == None:
             pass
@@ -41,6 +42,7 @@ class Bullet:
 
     def initbullet(self, angle, state, x, y):
         self.hit = 0
+        self.ex = 1
         if state == Bullet.PATTERN_1:
             self.x = x#random.randint(50,750)
             self.y = y#random.randint(50,550)
@@ -71,7 +73,7 @@ class Bullet:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 15, self.y - 15, self.x + 15, self.y + 15
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
 
     def update(self, frame_time):
         if self.state == Bullet.PATTERN_1:
@@ -89,5 +91,7 @@ class Bullet:
             self.r += frame_time * self.fall_speed
             self.x += sin(self.angle)*self.r
             self.y += cos(self.angle)*self.r
+        if self.x < 0 or 800 < self.x or self.y < 0 or 600 < self.y:
+            self.ex = 0
         #print("hihihi")
     pass
